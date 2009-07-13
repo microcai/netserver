@@ -1,4 +1,11 @@
+
+#ifndef __JOBQUEUE__HPP
+#define __JOBQUEUE__HPP
 #pragma once
+
+#include <list>
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/condition.hpp>
 
 template <typename Job>
 class jobqueue
@@ -56,3 +63,4 @@ Job jobqueue<Job>::getjob()
 	return tmp;
 }
 
+#endif //__JOBQUEUE__HPP

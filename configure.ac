@@ -15,7 +15,8 @@ AC_PROG_CC
 # Checks for libraries.
 
 # Checks for header files.
-
+AC_CHECK_LIB(boost_thread-mt,[main])
+AC_CHECK_LIB(boost_system-mt,[main])
 # Checks for typedefs, structures, and compiler characteristics.
 
 # Checks for library functions.
