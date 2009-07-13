@@ -1,1 +1,3 @@
-SUBDIRS=netserver
+
+SUBDIRS = netserver
+
