@@ -49,50 +49,10 @@ private:
 	boost::shared_ptr<server> _serverptr;
 };
 
-class __declspec(novtable) A
-{
-public:
-	virtual void print()
-	{
-		printf("a\n");
-	}
-};
-
-class  B : public A
-{
-public:
-	virtual void print()
-	{
-		printf("b\n");
-	}
-};
-
-class C : public B
-{
-public:
-	/*virtual*/ void print()
-	{
-		printf("c\n");
-	}
-};
-#include <io.h>
 int main(int argc, char* argv[])
 {
 	try
 	{
-		open("c:\\s", 0);
-		A * a = new B();
-		a->print(); // 在这里，a虽然是指向A的指针，但是被调用的函数(foo)却是B的!
-
-		A* p2 = (A*)new C;
-		p2->print();
-
-		if (argc != 2)
-		{
-			std::cerr << "Usage: netserver <port>\n";
-			return 1;
-		}
-
 		RunServer runServer1(atoi(argv[1]));                // 第一个server.
 		RunServer runServer2(atoi(argv[1]) + 1);            // 第二个server.
 
