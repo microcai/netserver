@@ -1,6 +1,15 @@
+
+#ifndef _NET_HPP
+#define _NET_HPP
+
 #pragma once
 
 #include "jobqueue.hpp"
+
+#include <boost/asio.hpp>
+
+#include "BasePacket.h"
+
 
 using boost::asio::ip::tcp;
 
@@ -8,6 +17,7 @@ class server;
 class message;
 class session;
 class io_service_pool;
+
 
 typedef boost::shared_ptr<session> session_ptr;
 typedef boost::shared_ptr<message> message_ptr;
@@ -19,7 +29,7 @@ public:
 	enum { header_length = 8 };
 	enum { max_body_length = 102400 };
 
-	message() 
+	message()
 		: body_length_(0)
 		, msg_(NULL)
 	{}
@@ -48,6 +58,11 @@ public:
 	}
 
 	void setsession(session_ptr& _session)
+	{
+		session_ = _session;
+	}
+
+	void setsession(const session_ptr& _session)
 	{
 		session_ = _session;
 	}
@@ -82,7 +97,7 @@ public:
 	bool decode_header()
 	{
 		msg_ = (packMsgPtr)data_;
-		if (msg_->MsgHead.packsize > header_length + max_body_length) 
+		if (msg_->MsgHead.packsize > header_length + max_body_length)
 		{
 			body_length_ = 0;
 			return false;
@@ -95,7 +110,7 @@ public:
 	{
 		msg_ = (packMsgPtr)data_;
 		if (msg_->MsgHead.packsize > header_length + max_body_length ||
-			bytes_transferred != msg_->MsgHead.packsize - header_length) 
+			bytes_transferred != msg_->MsgHead.packsize - header_length)
 		{
 			body_length_ = 0;
 			return false;
@@ -113,7 +128,7 @@ public:
 	message& operator =(message &msg)
 	{
 		memcpy(data_, msg.data_, header_length + max_body_length);
-		body_length_ = msg.body_length_;		
+		body_length_ = msg.body_length_;
 		msg_ = (packMsgPtr)data_;
 		session_ = msg.session_;
 		return (*this);
@@ -193,7 +208,7 @@ private:
 	jobqueue<message>& jobwork_;
 	io_service_pool io_service_pool_;
 	tcp::acceptor acceptor_;
-	
+
 	boost::object_pool<message> message_pool_;
 };
-
+#endif // _NET_HPP

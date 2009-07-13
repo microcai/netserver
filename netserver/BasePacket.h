@@ -5,81 +5,82 @@
 
 //////////////////////////////////////////////////////////////////////////
 /*
-// Í¨ÓÃ·â°üÀà,»ùÀà.
+   Í¨ï¿½Ã·ï¿½ï¿½ï¿½ï¿½,ï¿½ï¿½ï¿½ï¿½.
+
 class CBasePacket
 {
 public:
-CString m_oriPacket;      // Ô­Ê¼·â°ü.
-CString m_packetType;     // ·â°ü±êÊ¶ÀàÐÍ.
+CString m_oriPacket;      // Ô­Ê¼ï¿½ï¿½ï¿½.
+CString m_packetType;     // ï¿½ï¿½ï¿½ï¿½Ê¶ï¿½ï¿½ï¿½ï¿½.
 
 public:
 CBasePacket(void);
 virtual ~CBasePacket(void);
-bool parsePacket(CString oriPacket);  // ½âÎö·â°ü.
+bool parsePacket(CString oriPacket);  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
 };
 
-// ÐÄÌø°ü.
+// ï¿½ï¿½ï¿½ï¿½ï¿½.
 class Pack_Heart : public CBasePacket
 {
 public:
-CString m_session; // »á»°ÐÅÏ¢.
+CString m_session; // ï¿½á»°ï¿½ï¿½Ï¢.
 
-bool parsePacket(CString oriPacket);  // ½âÎö·â°ü.
-CString toString();					  // ºÏ²¢·â°ü. 
+bool parsePacket(CString oriPacket);  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
+CString toString();					  // ï¿½Ï²ï¿½ï¿½ï¿½ï¿½.
 };
 
-// µÇÈëµÇ³ö·â°üÀà.
+// ï¿½ï¿½ï¿½ï¿½Ç³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
 class Pack_Logon : public CBasePacket
 {
 public:
-CString m_user;		// ÓÃ»§Ãû.
-CString m_pass;		// ÃÜÂë.
-CString m_flag;		// ±êÖ¾£¬µÇÂ½£¬µÇ³ö.
+CString m_user;		// ï¿½Ã»ï¿½ï¿½ï¿½.
+CString m_pass;		// ï¿½ï¿½ï¿½ï¿½.
+CString m_flag;		// ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Â½ï¿½ï¿½ï¿½Ç³ï¿½.
 CString m_session;
 
-bool parsePacket(CString oriPacket);	// ²ð½â·â°ü.
-CString toString();						// ºÏ²¢·â°ü.
+bool parsePacket(CString oriPacket);	// ï¿½ï¿½ï¿½ï¿½ï¿½.
+CString toString();						// ï¿½Ï²ï¿½ï¿½ï¿½ï¿½.
 };
 
 */
 //////////////////////////////////////////////////////////////////////////
 
-// ÐÄÌø°ü.
+// ï¿½ï¿½ï¿½ï¿½ï¿½.
 typedef struct _tagHeart
 {
-	UINT type;          // ·â°üÀàÐÍ.
-	UINT packsize;      // ·â°ü´óÐ¡.
+	UINT type;          // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
+	UINT packsize;      // ï¿½ï¿½ï¿½ï¿½Ð¡.
 
-	UINT session;       // »á»°±êÖ¾.
+	UINT session;       // ï¿½á»°ï¿½ï¿½Ö¾.
 }* packHeartPtr, packHeart;
 
 #define packHeartSize sizeof(packHeart)
 
 
-// µÇÂ½°ü.
+// ï¿½ï¿½Â½ï¿½ï¿½.
 typedef struct _tagLogon
 {
-	UINT type;          // ·â°üÀàÐÍ.
-	UINT packsize;      // ·â°ü´óÐ¡.
+	UINT type;          // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
+	UINT packsize;      // ï¿½ï¿½ï¿½ï¿½Ð¡.
 
-	UINT session;       // »á»°±êÖ¾.
-	CHAR user[20];		// ÓÃ»§Ãû.
-	CHAR pass[20];		// ÃÜÂë.
-	UINT flag;			// ±êÖ¾£¬µÇÂ½£¬µÇ³ö.
+	UINT session;       // ï¿½á»°ï¿½ï¿½Ö¾.
+	CHAR user[20];		// ï¿½Ã»ï¿½ï¿½ï¿½.
+	CHAR pass[20];		// ï¿½ï¿½ï¿½ï¿½.
+	UINT flag;			// ï¿½ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½Â½ï¿½ï¿½ï¿½Ç³ï¿½.
 }* packLogonPtr, packLogon;
 
 #define packLogonSize sizeof(packLogon)
 
 typedef union _tagMsg
 {
-	struct _tagMsgHead 
+	struct _tagMsgHead
 	{
-		UINT type;										// ·â°üÀàÐÍ.
-		UINT packsize;									// ·â°ü´óÐ¡.
+		UINT type;										// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
+		UINT packsize;									// ï¿½ï¿½ï¿½ï¿½Ð¡.
 	}MsgHead;
 
-	packHeart heart;									// ÐÄÌø°ü.
-	packLogon logon;									// µÇÂ½°ü.
+	packHeart heart;									// ï¿½ï¿½ï¿½ï¿½ï¿½.
+	packLogon logon;									// ï¿½ï¿½Â½ï¿½ï¿½.
 } packMsg, *packMsgPtr;
 
 
