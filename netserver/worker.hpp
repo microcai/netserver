@@ -1,4 +1,10 @@
+#ifndef WORKER_H__
+#define WORKER_H__
+
+#if _MSC_VER
 #pragma once
+#endif
+
 #include "jobqueue.hpp"
 
 template <typename Job>
@@ -91,3 +97,5 @@ void worker<Job>::work()               // 所有工作在些完成.
 
 	} while (!exitthread);
 }
+
+#endif // WORKER_H__

@@ -1,6 +1,10 @@
 #ifndef _HEAD_FILE_
 #define _HEAD_FILE_
 
+#if _MSC_VER
+#pragma once
+#endif
+
 // 禁用警告信息.
 #pragma warning(disable:4786)
 #pragma warning(disable:4089)

@@ -1,7 +1,10 @@
 #ifndef BASEPACKET_H__
 #define BASEPACKET_H__
 
+#if _MSC_VER
 #pragma once
+#endif
+
 
 //////////////////////////////////////////////////////////////////////////
 /*
