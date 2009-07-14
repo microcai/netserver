@@ -1,23 +1,26 @@
-// stdafx.h : ï¿½ï¿½×¼ÏµÍ³ï¿½ï¿½ï¿½Ä¼ï¿½ï¿½Ä°ï¿½ï¿½Ä¼ï¿½ï¿½ï¿½
-// ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½Ê¹ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Äµï¿½
-// ï¿½Ø¶ï¿½ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½Ä°ï¿½ï¿½Ä¼ï¿½
+// stdafx.h : ±ê×¼ÏµÍ³°üº¬ÎÄ¼şµÄ°üº¬ÎÄ¼ş£¬
+// »òÊÇ¾­³£Ê¹ÓÃµ«²»³£¸ü¸ÄµÄ
+// ÌØ¶¨ÓÚÏîÄ¿µÄ°üº¬ÎÄ¼ş
 //
 
 #pragma once
 
 
-#define WIN32_LEAN_AND_MEAN		// ï¿½ï¿½ Windows Í·ï¿½ï¿½ï¿½Å³ï¿½ï¿½ï¿½Ê¹ï¿½Ãµï¿½ï¿½ï¿½ï¿½ï¿½
+#define WIN32_LEAN_AND_MEAN		// ´Ó Windows Í·ÖĞÅÅ³ı¼«ÉÙÊ¹ÓÃµÄ×ÊÁÏ
 #include <stdio.h>
-//#include <tchar.h>
-#include <stddef.h>
-#include <stdint.h>
+#include <tchar.h>
 
 #ifndef _WIN32
 
+// ±ê×¼µÄlinuxÀàĞÍ¶¨ÒåÎÄ¼ş.
+#include <stdint.h>
+
+// ¼æÈİVCµÄÀàĞÍ.
+typedef char CHAR;
 typedef unsigned int UINT;
-#define CHAR char
 
 #endif
+
 //////////////////////////////////////////////////////////////////////////
 #include "inc.h"
 #include "defs.h"

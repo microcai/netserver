@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "StdAfx.h"
 #include "net.hpp"
 
 //////////////////////////////////////////////////////////////////////////
@@ -59,7 +59,7 @@ session::session(boost::asio::io_service& io_service, jobqueue<message>& jobwork
 }
 
 session::~session()
-{
+{	
 }
 
 tcp::socket& session::socket()
@@ -90,7 +90,7 @@ void session::handle_read_body(const boost::system::error_code& error,
 			boost::asio::placeholders::bytes_transferred)));
 	}
 	else
-	{
+	{		
 		message_pool_.destroy(message_);
 	}
 }
@@ -123,7 +123,7 @@ void session::handle_write(const boost::system::error_code& error)
 	}
 	else
 	{
-		// ï¿½ï¿½ï¿½ÅµÄ¹Ø±Õ¸ï¿½ï¿½ï¿½ï¿½ï¿½.
+		// ÓÅÑÅµÄ¹Ø±Õ¸ÃÁ¬½Ó.
 		boost::system::error_code ignored_ec;
 		socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_both, ignored_ec);
 		message_pool_.destroy(message_);
@@ -154,9 +154,9 @@ void server::stop()
 }
 
 void server::handle_accept(session_ptr new_session,
-				   const boost::system::error_code& error)
+				   const boost::system::error_code& error) 
 {
-	if (!error)
+	if (!error) 
 	{
 		new_session->start();
 		new_session.reset(new session(io_service_pool_.get_io_service(), jobwork_, message_pool_));
