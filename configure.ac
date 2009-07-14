@@ -2,7 +2,7 @@
 # Process this file with autoconf to produce a configure script.
 
 AC_PREREQ([2.63])
-AC_INIT([FULL-PACKAGE-NAME], [VERSION], [BUG-REPORT-ADDRESS])
+AC_INIT([netserver], [1.0], [ microcai@fedoraproject.org ])
 AC_CONFIG_SRCDIR([netserver/net.cpp])
 AC_CONFIG_HEADERS([config.h])
 
