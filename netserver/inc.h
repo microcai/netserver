@@ -5,7 +5,8 @@
 #pragma once
 #endif
 
-// ½ûÓÃ¾¯¸æÐÅÏ¢.
+// ï¿½ï¿½ï¿½Ã¾ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢.
+//
 #pragma warning(disable:4786)
 #pragma warning(disable:4089)
 #pragma warning(disable:4146)
@@ -13,7 +14,7 @@
 #pragma warning(disable:4996)
 #pragma warning(disable:4267)
 
-// Í·ÎÄ¼þ°üº¬.
+// Í·ï¿½Ä¼ï¿½ï¿½ï¿½.
 #include <string>
 
 #include <stdexcept>
@@ -22,7 +23,7 @@
 #include <deque>
 #include <set>
 #include <iostream>
-#include <strstream>
+//#include <strstream>
 #include <vector>
 
 #include <boost/asio.hpp>

@@ -1,4 +1,4 @@
-// netserver.cpp : ¶¨Òå¿ØÖÆÌ¨Ó¦ÓÃ³ÌÐòµÄÈë¿Úµã¡£
+// netserver.cpp : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨Ó¦ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµã¡£
 //
 
 #include "stdafx.h"
@@ -18,12 +18,12 @@ public:
  		_listenthreadptr.reset(new boost::thread(boost::bind(&RunServer::RunNetListen, this)));
  		_workthreadptr.reset(new boost::thread(boost::bind(&RunServer::RunWorks, this)));
 	}
-	
+
 	~RunServer()
 	{
-		_workerptr->stop(); // Í£Ö¹¹¤×÷.
-		_serverptr->stop(); // Í£Ö¹·þÎñ.
-		_jobqueueptr->notify_all(); // Í¨Öª¶ÓÁÐÈ¡ÏûµÈ´ýÈÎÎñ.
+		_workerptr->stop(); // Í£Ö¹ï¿½ï¿½ï¿½ï¿½.
+		_serverptr->stop(); // Í£Ö¹ï¿½ï¿½ï¿½ï¿½.
+		_jobqueueptr->notify_all(); // Í¨Öªï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½.
 
 		_listenthreadptr->join();
 		_workthreadptr->join();
@@ -44,8 +44,8 @@ public:
 private:
 	boost::shared_ptr<boost::thread> _listenthreadptr;
 	boost::shared_ptr<boost::thread> _workthreadptr;
-	boost::shared_ptr<jobqueue<message> > _jobqueueptr;	
-	boost::shared_ptr<worker<message> > _workerptr;	
+	boost::shared_ptr<jobqueue<message> > _jobqueueptr;
+	boost::shared_ptr<worker<message> > _workerptr;
 	boost::shared_ptr<server> _serverptr;
 };
 
@@ -57,20 +57,22 @@ int main(int argc, char* argv[])
 		{
 			std::cerr << "usage: ./netserver <port>\n";
 			return 1;
-		}	
+		}
 
-		RunServer runServer1(atoi(argv[1]));                // µÚÒ»¸öserver.
-		RunServer runServer2(atoi(argv[1]) + 1);            // µÚ¶þ¸öserver.
+		RunServer runServer1(atoi(argv[1]));                // ï¿½ï¿½Ò»ï¿½ï¿½server.
+		RunServer runServer2(atoi(argv[1]) + 1);            // ï¿½Ú¶ï¿½ï¿½ï¿½server.
 
-		// µÈ´ýÍË³ö...
+		// ï¿½È´ï¿½ï¿½Ë³ï¿½...
 		std::string in;
 
-		std::cout << "ÊäÈë\'exit\'ÍË³ö.\nprompt # ";
+		std::cout << "type 'exit' to exit.\nprompt # ";
+
 		for (;;)
 		{
 			char c = getchar();
-			if (c == '\n')
+			if (c == '\n' || c == EOF )
 			{
+
 				if (in == "exit")
 					break;
 				else if(in != "")
@@ -78,7 +80,7 @@ int main(int argc, char* argv[])
 
 
 				std::cout << "prompt # ";
-				in = "";				
+				in = "";
 			}
 			else
 			{
