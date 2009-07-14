@@ -1,4 +1,9 @@
+#ifndef NET_H__
+#define NET_H__
+
+#if _MSC_VER
 #pragma once
+#endif
 
 #include "jobqueue.hpp"
 
@@ -197,3 +202,4 @@ private:
 	boost::object_pool<message> message_pool_;
 };
 
+#endif // NET_H__

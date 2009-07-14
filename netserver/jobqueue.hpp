@@ -1,4 +1,9 @@
+#ifndef JOBQUEUE_H__
+#define JOBQUEUE_H__
+
+#if _MSC_VER
 #pragma once
+#endif
 
 template <typename Job>
 class jobqueue
@@ -56,3 +61,4 @@ Job jobqueue<Job>::getjob()
 	return tmp;
 }
 
+#endif // JOBQUEUE_H__

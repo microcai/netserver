@@ -1,6 +1,10 @@
 #ifndef _HEAP_FILE_DEFS_
 #define _HEAP_FILE_DEFS_
 
+#if _MSC_VER
+#pragma once
+#endif
+
 typedef enum _tagNetMsgType
 {
 	MSG_USER_HEART                         ,	// ÐÄÌø°ü.
