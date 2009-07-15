@@ -1,7 +1,13 @@
-// stdafx.h : ��׼ϵͳ���ļ��İ��ļ���
-// ���Ǿ���ʹ�õ�������ĵ�?
-// �ض�����Ŀ�İ��ļ�
-//
+/*
+ *
+ * Copyright (C) 2009 jack.wgm, microcai.
+ * For conditions of distribution and use, see copyright notice 
+ * in (http://code.google.com/p/netsever/source/browse/trunk/COPYING)
+ *
+ * Author: jack.wgm
+ * Email:  jack.wgm@gmail.com
+ */
+
 #if _MSC_VER
 #pragma once
 #endif

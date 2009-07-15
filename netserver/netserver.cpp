@@ -68,7 +68,7 @@ int main(int argc, char* argv[])
 		std::cout << "type 'exit' to exit.\nprompt # ";
 
 		for (;;)
-		{
+		{			
 			char c = getchar();
 			if (c == '\n' || c == EOF )
 			{
