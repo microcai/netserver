@@ -1,3 +1,14 @@
+/*
+ *
+ * Copyright (C) 2009 jack.wgm, microcai.
+ * For conditions of distribution and use, see copyright notice 
+ * in (http://code.google.com/p/netsever/source/browse/trunk/COPYING)
+ *
+ * Author: jack.wgm
+ * Email:  jack.wgm@gmail.com
+ */
+
+
 #ifndef _HEAD_FILE_
 #define _HEAD_FILE_
 
@@ -5,8 +16,7 @@
 #pragma once
 #endif
 
-// ï¿½ï¿½ï¿½Ã¾ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢.
-//
+// ½ûÓÃ¾¯¸æÐÅÏ¢.
 #pragma warning(disable:4786)
 #pragma warning(disable:4089)
 #pragma warning(disable:4146)
@@ -14,7 +24,7 @@
 #pragma warning(disable:4996)
 #pragma warning(disable:4267)
 
-// Í·ï¿½Ä¼ï¿½ï¿½ï¿½.
+// Í·ÎÄ¼þ°üº¬.
 #include <string>
 
 #include <stdexcept>
@@ -23,7 +33,6 @@
 #include <deque>
 #include <set>
 #include <iostream>
-//#include <strstream>
 #include <vector>
 
 #include <boost/asio.hpp>

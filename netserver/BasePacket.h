@@ -1,3 +1,13 @@
+/*
+ *
+ * Copyright (C) 2009 jack.wgm, microcai.
+ * For conditions of distribution and use, see copyright notice 
+ * in (http://code.google.com/p/netsever/source/browse/trunk/COPYING)
+ *
+ * Author: jack.wgm
+ * Email:  jack.wgm@gmail.com
+ */
+
 #ifndef BASEPACKET_H__
 #define BASEPACKET_H__
 
