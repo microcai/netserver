@@ -1,4 +1,4 @@
-// netserver.cpp : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨Ó¦ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµã¡£
+// netserver.cpp : ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¨Ó¦ï¿½Ã³ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµã¡?
 //
 
 #include "stdafx.h"
@@ -7,23 +7,56 @@
 #include "worker.hpp"
 #include "jobqueue.hpp"
 
+class MyWorker : public worker<message>
+{
+public:
+	MyWorker(jobqueue<message>& _jobqueue, std::size_t _maxthreads = 4) :
+	  worker(_jobqueue, _maxthreads)
+	  {}
+
+	  virtual bool work(message& task)       // ÔÚÐ©Íê³ÉÊµ¼ÊÈÎÎñ.
+	  {
+		  session_ptr psession;
+		  task.getsession(psession);
+		  if (!psession) 
+			  return false;
+
+		  packMsgPtr MsgPtr = task.msg();
+
+		  // ÓÃpsessionÍù¿Í»§¶Ë»Ø·¢Êý¾Ý;
+		  switch (MsgPtr->MsgHead.type)
+		  {
+		  case MSG_USER_HEART:
+			  // this->OnHeart(MsgPtr->heart);           // ´¦ÀíÐÄÌø.
+			  break;
+		  case MSG_USER_LOGON:
+			  // this->OnLogon(MsgPtr->logon);           // ´¦ÀíµÇÂ½.
+			  break;
+		  default:
+			  break;
+		  }
+
+		  return true;
+	  }
+};
+
 class RunServer
 {
 public:
 	RunServer(int port)
-	: _jobqueueptr(new jobqueue<message>)
-	, _workerptr(new worker<message>((*_jobqueueptr.get())))
-	, _serverptr(new server(port, (*_jobqueueptr.get())))
+		: _jobqueueptr(new jobqueue<message>)
+		, _workerptr(new MyWorker((*_jobqueueptr.get())))
+		, _serverptr(new server(port, (*_jobqueueptr.get())))
 	{
- 		_listenthreadptr.reset(new boost::thread(boost::bind(&RunServer::RunNetListen, this)));
- 		_workthreadptr.reset(new boost::thread(boost::bind(&RunServer::RunWorks, this)));
+		_listenthreadptr.reset(new boost::thread(boost::bind(&RunServer::RunNetListen, this)));
+		_workthreadptr.reset(new boost::thread(boost::bind(&RunServer::RunWorks, this)));
 	}
 
-	~RunServer()
+	~RunServer() 
 	{
-		_workerptr->stop(); // Í£Ö¹ï¿½ï¿½ï¿½ï¿½.
-		_serverptr->stop(); // Í£Ö¹ï¿½ï¿½ï¿½ï¿½.
-		_jobqueueptr->notify_all(); // Í¨Öªï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½È´ï¿½ï¿½ï¿½ï¿½ï¿½.
+		_workerptr->stop(); // Í£Ö¹.
+		_serverptr->stop(); // Í£Ö¹.
+		_jobqueueptr->notify_all(); // Í¨Öª.
 
 		_listenthreadptr->join();
 		_workthreadptr->join();
@@ -45,7 +78,7 @@ private:
 	boost::shared_ptr<boost::thread> _listenthreadptr;
 	boost::shared_ptr<boost::thread> _workthreadptr;
 	boost::shared_ptr<jobqueue<message> > _jobqueueptr;
-	boost::shared_ptr<worker<message> > _workerptr;
+	boost::shared_ptr<MyWorker> _workerptr;
 	boost::shared_ptr<server> _serverptr;
 };
 
