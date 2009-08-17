@@ -97,7 +97,8 @@ public:
 	bool decode_header()
 	{
 		msg_ = (packMsgPtr)data_;
-		if (msg_->MsgHead.packsize > header_length + max_body_length) 
+		if (msg_->MsgHead.packsize > header_length + max_body_length ||
+			msg_->MsgHead.packsize < header_length) 
 		{
 			body_length_ = 0;
 			return false;
@@ -110,6 +111,7 @@ public:
 	{
 		msg_ = (packMsgPtr)data_;
 		if (msg_->MsgHead.packsize > header_length + max_body_length ||
+			msg_->MsgHead.packsize < header_length ||
 			bytes_transferred != msg_->MsgHead.packsize - header_length) 
 		{
 			body_length_ = 0;
