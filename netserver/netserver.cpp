@@ -11,7 +11,7 @@ class MyWorker : public worker<message>
 {
 public:
 	MyWorker(jobqueue<message>& _jobqueue, std::size_t _maxthreads = 4) :
-	  worker(_jobqueue, _maxthreads)
+	  worker<message>(_jobqueue, _maxthreads)
 	  {}
 
 	  virtual bool work(message& task)       // 在些完成实际任务.
