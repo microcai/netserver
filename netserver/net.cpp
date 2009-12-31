@@ -48,6 +48,26 @@ boost::asio::io_service& io_service_pool::get_io_service()
 }
 
 //////////////////////////////////////////////////////////////////////////
+#if defined(SOCKET_SSL)
+
+session::session(boost::asio::io_service& io_service, 
+				jobqueue<message>& jobwork, 
+				boost::object_pool<message>& message_pool,
+				boost::asio::ssl::context& context)
+: socket_(io_service, context)
+, strand_(io_service)
+, jobwork_(jobwork)
+, message_pool_(message_pool)
+{
+	message_ = message_pool_.construct();
+}
+
+ssl_socket::lowest_layer_type& session::socket()
+{
+	return socket_.lowest_layer();
+}
+
+#else
 
 session::session(boost::asio::io_service& io_service, jobqueue<message>& jobwork, boost::object_pool<message>& message_pool)
 : socket_(io_service)
@@ -58,14 +78,45 @@ session::session(boost::asio::io_service& io_service, jobqueue<message>& jobwork
 	message_ = message_pool_.construct();
 }
 
-session::~session()
-{
-}
-
 tcp::socket& session::socket()
 {
 	return socket_;
 }
+
+#endif // SOCKET_SSL
+
+session::~session()
+{
+}
+
+#if defined(SOCKET_SSL)
+
+void session::start()
+{
+	message_->setsession(shared_from_this());
+
+	socket_.async_handshake(boost::asio::ssl::stream_base::server,
+		boost::bind(&session::handle_handshake, shared_from_this(),
+		boost::asio::placeholders::error));
+}
+
+void session::handle_handshake(const boost::system::error_code& error)
+{
+	if (!error)
+	{
+		socket_.async_read_some(boost::asio::buffer(message_->data(), message::header_length),
+			strand_.wrap(
+			boost::bind(&session::handle_read_head, shared_from_this(),
+			boost::asio::placeholders::error,
+			boost::asio::placeholders::bytes_transferred)));
+	}
+	else
+	{
+		message_pool_.destroy(message_);
+	}
+}
+
+#else
 
 void session::start()
 {
@@ -76,6 +127,8 @@ void session::start()
 		boost::asio::placeholders::error,
 		boost::asio::placeholders::bytes_transferred)));
 }
+
+#endif // SOCKET_SSL
 
 void session::handle_read_body(const boost::system::error_code& error,
 							   size_t bytes_transferred)
@@ -123,14 +176,60 @@ void session::handle_write(const boost::system::error_code& error)
 	}
 	else
 	{
-		// ï¿½ï¿½ï¿½ÅµÄ¹Ø±Õ¸ï¿½ï¿½ï¿½ï¿½ï¿½.
+		// ÓÅÑÅµÄ¹Ø±ÕÌ×½Ó×Ö.
 		boost::system::error_code ignored_ec;
+#if defined(SOCKET_SSL)
+		socket_.shutdown(ignored_ec);
+#else
 		socket_.shutdown(boost::asio::ip::tcp::socket::shutdown_both, ignored_ec);
+#endif // SOCKET_SSL
+
 		message_pool_.destroy(message_);
 	}
 }
 
 //////////////////////////////////////////////////////////////////////////
+#if defined(SOCKET_SSL)
+server::server(short port, jobqueue<message>& jobwork, std::size_t io_service_pool_size/* = 4*/)
+: io_service_pool_(io_service_pool_size)
+, jobwork_(jobwork)
+, acceptor_(io_service_pool_.get_io_service(), tcp::endpoint(tcp::v4(), port))
+, context_(io_service_pool_.get_io_service(), boost::asio::ssl::context::sslv23)
+{
+	context_.set_options(
+		boost::asio::ssl::context::default_workarounds
+		| boost::asio::ssl::context::no_sslv2
+		| boost::asio::ssl::context::single_dh_use);
+	context_.set_password_callback(boost::bind(&server::get_password, this));
+	context_.use_certificate_chain_file("server.pem");
+	context_.use_private_key_file("server.pem", boost::asio::ssl::context::pem);
+	context_.use_tmp_dh_file("dh512.pem");
+
+	session_ptr new_session(new session(io_service_pool_.get_io_service(), jobwork_, message_pool_, context_));
+	acceptor_.async_accept(new_session->socket(),
+		boost::bind(&server::handle_accept, this, new_session,
+		boost::asio::placeholders::error));
+}
+
+std::string server::get_password() const
+{
+	return "test";
+}
+
+void server::handle_accept(session_ptr new_session,
+						   const boost::system::error_code& error)
+{
+	if (!error)
+	{
+		new_session->start();
+		new_session.reset(new session(io_service_pool_.get_io_service(), jobwork_, message_pool_, context_));
+		acceptor_.async_accept(new_session->socket(),
+			boost::bind(&server::handle_accept, this, new_session,
+			boost::asio::placeholders::error));
+	}
+}
+
+#else
 
 server::server(short port, jobqueue<message>& jobwork, std::size_t io_service_pool_size/* = 4*/)
 : io_service_pool_(io_service_pool_size)
@@ -143,18 +242,8 @@ server::server(short port, jobqueue<message>& jobwork, std::size_t io_service_po
 		boost::asio::placeholders::error));
 }
 
-void server::run()
-{
-	io_service_pool_.run();
-}
-
-void server::stop()
-{
-	io_service_pool_.stop();
-}
-
 void server::handle_accept(session_ptr new_session,
-				   const boost::system::error_code& error)
+						   const boost::system::error_code& error)
 {
 	if (!error)
 	{
@@ -165,3 +254,17 @@ void server::handle_accept(session_ptr new_session,
 			boost::asio::placeholders::error));
 	}
 }
+
+#endif // SOCKET_SSL
+
+
+void server::run()
+{
+	io_service_pool_.run();
+}
+
+void server::stop()
+{
+	io_service_pool_.stop();
+}
+

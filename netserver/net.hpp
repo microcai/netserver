@@ -27,6 +27,10 @@ class io_service_pool;
 typedef boost::shared_ptr<session> session_ptr;
 typedef boost::shared_ptr<message> message_ptr;
 
+#ifdef SOCKET_SSL
+typedef boost::asio::ssl::stream<boost::asio::ip::tcp::socket> ssl_socket;
+#endif // SOCKET_SSL
+
 //////////////////////////////////////////////////////////////////////////
 class message
 {
@@ -170,6 +174,63 @@ private:
 };
 
 //////////////////////////////////////////////////////////////////////////
+#if defined(SOCKET_SSL) // 使用ssl加密.
+
+class session
+	: public boost::enable_shared_from_this<session>
+{
+public:
+	session(boost::asio::io_service& io_service, 
+			jobqueue<message>& jobwork, 
+			boost::object_pool<message>& message_pool, 
+			boost::asio::ssl::context& context);
+	~session();
+
+	ssl_socket::lowest_layer_type& socket();
+
+	void handle_handshake(const boost::system::error_code& error);
+
+	void start();
+	void write();
+
+	void handle_read_head(const boost::system::error_code& error, size_t bytes_transferred);
+	void handle_read_body(const boost::system::error_code& error, size_t bytes_transferred);
+	void handle_write(const boost::system::error_code& error);
+
+private:
+	ssl_socket socket_;
+	jobqueue<message>& jobwork_;
+	// message message_;
+	message* message_;
+
+	boost::asio::io_service::strand strand_;
+	boost::object_pool<message>& message_pool_;
+};
+
+//////////////////////////////////////////////////////////////////////////
+class server
+{
+public:
+	server(short port, jobqueue<message>& jobwork, std::size_t io_service_pool_size = 4);
+
+	void run();
+	void stop();
+	void handle_accept(session_ptr new_session,
+		const boost::system::error_code& error);
+
+	std::string get_password() const;
+
+private:
+	jobqueue<message>& jobwork_;
+	io_service_pool io_service_pool_;
+	tcp::acceptor acceptor_;
+
+	boost::asio::ssl::context context_;
+	boost::object_pool<message> message_pool_;
+};
+
+#else // 未使用ssl加密.
+
 class session
 	: public boost::enable_shared_from_this<session>
 {
@@ -204,14 +265,18 @@ public:
 	void run();
 	void stop();
 	void handle_accept(session_ptr new_session,
-					const boost::system::error_code& error);
+		const boost::system::error_code& error);
 
 private:
 	jobqueue<message>& jobwork_;
 	io_service_pool io_service_pool_;
 	tcp::acceptor acceptor_;
-	
+
 	boost::object_pool<message> message_pool_;
 };
+
+#endif // SOCKET_SSL
+
+
 
 #endif // NET_H__
