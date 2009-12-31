@@ -43,6 +43,7 @@
 #include <boost/format.hpp>
 #include <boost/foreach.hpp>
 #include <boost/function.hpp>
+#include <boost/asio/ssl.hpp>
 #include <boost/weak_ptr.hpp>
 #include <boost/tokenizer.hpp>
 #include <boost/shared_ptr.hpp>
@@ -55,5 +56,6 @@
 #include <boost/thread/condition.hpp>
 #include <boost/enable_shared_from_this.hpp>
 
+#include "config.h"
 
 #endif //_HEAP_FILE_
