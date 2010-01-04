@@ -48,8 +48,8 @@ class message
 	// 恢复结构体字节对齐.
 	#pragma pack(pop)
 
-	#define header_length sizeof(header)		// 头大小.
-	#define default_body_length 10240			// 默认内存大小10k.
+	#define HEADER_LENGTH sizeof(header)		// 头大小.
+	#define DEFAULT_BODY_LENGTH 10240			// 默认内存大小10k.
 
 public:
 	message() 
@@ -57,9 +57,9 @@ public:
 		, msg_(NULL)
 	{
 		// 默认分配内存块大小.
-		data_ = new char[default_body_length + header_length];
+		data_ = new char[DEFAULT_BODY_LENGTH + HEADER_LENGTH];
 		wptr_ = rptr_ = data_;
-		data_size_ = default_body_length + header_length;
+		data_size_ = DEFAULT_BODY_LENGTH + HEADER_LENGTH;
 	}
 
 	message(const message& msg)
@@ -123,7 +123,7 @@ public:
 
 	size_t length() const
 	{
-		return header_length + body_length_;
+		return HEADER_LENGTH + body_length_;
 	}
 
 	void setsession(const session_ptr& _session)
@@ -143,7 +143,7 @@ public:
 
 	size_t header_length() const
 	{
-		return header_length;
+		return HEADER_LENGTH;
 	}
 
 	size_t body_length() const
@@ -169,25 +169,25 @@ public:
 			return false;
 		}
 		// 计算实际数据长度. 公式: body_length_ = 数据包大小 - header_length.
-		body_length_ = msg.packsize - header_length;
+		body_length_ = msg.packsize - HEADER_LENGTH;
 		// 如果内存不够,重新分配大内存.
-		if ((body_length_ + header_length) > data_size_)
+		if ((body_length_ + HEADER_LENGTH) > data_size_)
 		{
 			if (data_ != NULL)
 				delete data_;
 
-			data_size_ = body_length_ + header_length;
+			data_size_ = body_length_ + HEADER_LENGTH;
 			data_ = new char[data_size_];
 			wptr_ = rptr_ = data_;
 			msg_ = (headerPtr)data_;
 			*msg_ = msg;			
 		}
-		else if (((body_length_ + header_length) < default_body_length) && data_size_ > default_body_length)
+		else if (((body_length_ + HEADER_LENGTH) < DEFAULT_BODY_LENGTH) && data_size_ > DEFAULT_BODY_LENGTH)
 		{	// 撤消上次分配内存过大,重新分配内存.
 			if (data_ != NULL)
 				delete data_;
 
-			data_size_ = default_body_length + header_length;
+			data_size_ = DEFAULT_BODY_LENGTH + HEADER_LENGTH;
 			data_ = new char[data_size_];
 			wptr_ = rptr_ = data_;
 			msg_ = (headerPtr)data_;
@@ -195,7 +195,7 @@ public:
 		}
 
 		// 移动到数据开始位置.
-		wptr_ += header_length;
+		wptr_ += HEADER_LENGTH;
 
 		return true;
 	}
@@ -274,10 +274,12 @@ public:
 private:
 	ssl_socket socket_;
 	jobqueue<message>& jobwork_;
-	// message message_;
 	message* message_;
 
+#if defined(USE_SYNC)
 	boost::asio::io_service::strand strand_;
+#endif // USE_SYNC
+
 	boost::object_pool<message>& message_pool_;
 };
 
@@ -323,10 +325,12 @@ public:
 private:
 	tcp::socket socket_;
 	jobqueue<message>& jobwork_;
-	// message message_;
-	message* message_;
+	message* message_;	
 
+#if defined(USE_SYNC)
 	boost::asio::io_service::strand strand_;
+#endif // USE_SYNC
+
 	boost::object_pool<message>& message_pool_;
 };
 

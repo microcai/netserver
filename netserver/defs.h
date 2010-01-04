@@ -15,11 +15,12 @@
 #pragma once
 #endif
 
-typedef enum _tagNetMsgType
-{
-	MSG_USER_HEART                         ,	// 心跳包.
-	MSG_USER_LOGON                         ,	// 用户登陆包.
-	
-} MSGTYPE;
+// 定义各数据包标识.
+#define MSG_PACK_HEART                         0x0000              // 心跳包.
+
+#define MSG_PACK_LOGON                         0x0001              // 用户登陆包.
+#define MSG_PACK_FBLOGON                       0x0002              // 用户登陆包.
+
+#define MSG_PACK_LOGOUT                        0x0003              // 用户登出包.
 
 #endif //_HEAP_FILE_DEFS_

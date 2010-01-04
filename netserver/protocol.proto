@@ -1,0 +1,37 @@
+package protocol;
+
+// 心跳包. c -> s.
+message Heart {
+  optional string reserve = 1;
+}
+
+// 登陆包. c -> s.
+message Logon {
+  required string user = 1;
+  required string pass = 2;
+  optional string verfiy = 3;
+  
+  enum SocketType {
+    Normal = 0;
+	SSL = 1;
+  }    
+}
+
+// 登陆返回包. s -> c.
+message LogonRet {
+  required string user = 1;
+  required string pass = 2;
+  optional string verfiy = 3;
+  
+  enum SocketType {
+    Normal = 0;
+	SSL = 1;
+  }    
+}
+
+// 登出包. c -> s.
+message Logout {
+  optional string reserve = 1;
+}
+
+

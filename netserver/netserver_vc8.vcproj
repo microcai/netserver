@@ -40,11 +40,11 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
+				AdditionalIncludeDirectories="&quot;../openssl/openssl-static/include&quot;;../protobuf"
 				PreprocessorDefinitions="WIN32;_DEBUG;_CONSOLE"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
 				RuntimeLibrary="3"
-				UsePrecompiledHeader="2"
 				WarningLevel="3"
 				Detect64BitPortabilityProblems="true"
 				DebugInformationFormat="4"
@@ -60,7 +60,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="ssleay32.lib libeay32.lib libprotobuf.lib libprotoc.lib"
 				LinkIncremental="2"
+				AdditionalLibraryDirectories="&quot;../openssl/openssl-static/lib&quot;;../protobuf/Debug"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				TargetMachine="1"
@@ -115,6 +117,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalIncludeDirectories="&quot;../openssl/openssl-static/include&quot;;../protobuf"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="2"
@@ -133,7 +136,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
+				AdditionalDependencies="ssleay32.lib libeay32.lib libprotobuf.lib libprotoc.lib"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories="&quot;../openssl/openssl-static/lib&quot;;../protobuf/Release"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -183,6 +188,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\protocol.pb.cc"
+				>
+			</File>
+			<File
 				RelativePath=".\stdafx.cpp"
 				>
 				<FileConfiguration
@@ -209,7 +218,7 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
-				RelativePath=".\BasePacket.h"
+				RelativePath=".\config.h"
 				>
 			</File>
 			<File
@@ -226,6 +235,10 @@
 			</File>
 			<File
 				RelativePath=".\net.hpp"
+				>
+			</File>
+			<File
+				RelativePath=".\protocol.pb.h"
 				>
 			</File>
 			<File
