@@ -15,47 +15,8 @@
 #pragma once
 #endif
 
-
-//////////////////////////////////////////////////////////////////////////
-/*
-// 通用封包类,基类.
-class CBasePacket
-{
-public:
-CString m_oriPacket;      // 原始封包.
-CString m_packetType;     // 封包标识类型.
-
-public:
-CBasePacket(void);
-virtual ~CBasePacket(void);
-bool parsePacket(CString oriPacket);  // 解析封包.
-};
-
-// 心跳包.
-class Pack_Heart : public CBasePacket
-{
-public:
-CString m_session; // 会话信息.
-
-bool parsePacket(CString oriPacket);  // 解析封包.
-CString toString();					  // 合并封包. 
-};
-
-// 登入登出封包类.
-class Pack_Logon : public CBasePacket
-{
-public:
-CString m_user;		// 用户名.
-CString m_pass;		// 密码.
-CString m_flag;		// 标志，登陆，登出.
-CString m_session;
-
-bool parsePacket(CString oriPacket);	// 拆解封包.
-CString toString();						// 合并封包.
-};
-
-*/
-//////////////////////////////////////////////////////////////////////////
+// 这里,保存了该对齐方式,1字节对齐.
+#pragma pack(push, 1)
 
 // 心跳包.
 typedef struct _tagHeart
@@ -88,6 +49,8 @@ typedef union _tagMsg
 	struct _tagMsgHead 
 	{
 		UINT type;										// 封包类型.
+		UINT checksum;									// 校检和,为其它三项之和. e.c type + rand + packsize.
+		UINT rand;										// 随机数.
 		UINT packsize;									// 封包大小.
 	}MsgHead;
 
@@ -95,9 +58,10 @@ typedef union _tagMsg
 	packLogon logon;									// 登陆包.
 } packMsg, *packMsgPtr;
 
+#define packHeadSize sizeof(MsgHead)
 
-//////////////////////////////////////////////////////////////////////////
-
+// 如果保存了对齐方式,用这个.
+#pragma pack(pop)
 
 #endif // BASEPACKET_H__
 
