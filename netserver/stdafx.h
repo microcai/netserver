@@ -29,5 +29,4 @@ typedef unsigned int UINT;
 //////////////////////////////////////////////////////////////////////////
 #include "inc.h"
 #include "defs.h"
-
-#include "BasePacket.h"
+#include "protocol.pb.h"

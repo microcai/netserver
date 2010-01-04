@@ -55,7 +55,9 @@ session::session(boost::asio::io_service& io_service,
 				boost::object_pool<message>& message_pool,
 				boost::asio::ssl::context& context)
 : socket_(io_service, context)
+#if defined(USE_SYNC)
 , strand_(io_service)
+#endif // USE_SYNC
 , jobwork_(jobwork)
 , message_pool_(message_pool)
 {
@@ -71,7 +73,9 @@ ssl_socket::lowest_layer_type& session::socket()
 
 session::session(boost::asio::io_service& io_service, jobqueue<message>& jobwork, boost::object_pool<message>& message_pool)
 : socket_(io_service)
+#if defined(USE_SYNC)
 , strand_(io_service)
+#endif // USE_SYNC
 , jobwork_(jobwork)
 , message_pool_(message_pool)
 {
@@ -105,10 +109,17 @@ void session::handle_handshake(const boost::system::error_code& error)
 	if (!error)
 	{
 		socket_.async_read_some(boost::asio::buffer(message_->data(), message_->header_length()),
+			
+#if defined(USE_SYNC)
 			strand_.wrap(
+#endif // USE_SYNC
 			boost::bind(&session::handle_read_head, shared_from_this(),
 			boost::asio::placeholders::error,
-			boost::asio::placeholders::bytes_transferred)));
+			boost::asio::placeholders::bytes_transferred)
+#if defined(USE_SYNC)
+			)
+#endif // USE_SYNC
+			);
 	}
 	else
 	{
@@ -122,10 +133,16 @@ void session::start()
 {
 	message_->setsession(shared_from_this());
 	socket_.async_read_some(boost::asio::buffer(message_->data(), message_->header_length()),
+#if defined(USE_SYNC)
 		strand_.wrap(
+#endif // USE_SYNC
 		boost::bind(&session::handle_read_head, shared_from_this(),
 		boost::asio::placeholders::error,
-		boost::asio::placeholders::bytes_transferred)));
+		boost::asio::placeholders::bytes_transferred)
+#if defined(USE_SYNC)
+		)
+#endif // USE_SYNC
+		);
 }
 
 #endif // SOCKET_SSL
@@ -137,16 +154,35 @@ void session::handle_read_body(const boost::system::error_code& error,
 	{
 		if (message_->check_body(bytes_transferred))
 		{
+			// 提交数据包到队列.
 			jobwork_.submitjob(*message_);
+			// 读取下一个数据包.
 			socket_.async_read_some(boost::asio::buffer(message_->data(), message_->header_length()),
+#if defined(USE_SYNC)
 				strand_.wrap(
+#endif // USE_SYNC
 				boost::bind(&session::handle_read_head, shared_from_this(),
 				boost::asio::placeholders::error,
-				boost::asio::placeholders::bytes_transferred)));
+				boost::asio::placeholders::bytes_transferred)
+#if defined(USE_SYNC)
+				)
+#endif // USE_SYNC
+				);
 		}
 		else
 		{
-
+			// 数据包未读取完整,继续读取.
+			socket_.async_read_some(boost::asio::buffer(message_->body(), message_->body_length()),
+#if defined(USE_SYNC)
+				strand_.wrap(
+#endif // USE_SYNC
+				boost::bind(&session::handle_read_body, shared_from_this(),
+				boost::asio::placeholders::error,
+				boost::asio::placeholders::bytes_transferred)
+#if defined(USE_SYNC)
+				)
+#endif // USE_SYNC
+				);
 		}
 	}
 	else
@@ -161,10 +197,16 @@ void session::handle_read_head(const boost::system::error_code& error,
 	if (!error && message_->decode_header())
 	{
 		socket_.async_read_some(boost::asio::buffer(message_->body(), message_->body_length()),
+#if defined(USE_SYNC)
 			strand_.wrap(
+#endif // USE_SYNC
 			boost::bind(&session::handle_read_body, shared_from_this(),
 			boost::asio::placeholders::error,
-			boost::asio::placeholders::bytes_transferred)));
+			boost::asio::placeholders::bytes_transferred)
+#if defined(USE_SYNC)
+			)
+#endif // USE_SYNC
+			);
 	}
 	else
 	{

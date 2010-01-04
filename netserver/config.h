@@ -19,7 +19,9 @@
 // 编译配置选项.
 
 // 使用ssl加密认证通信.
-#define SOCKET_SSL 
+#define SOCKET_SSL
 
+// 是否使用系统同步接收数据.
+#define USE_SYNC
 
 #endif // CONFIG_H__

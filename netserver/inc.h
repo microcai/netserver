@@ -23,6 +23,8 @@
 #pragma warning(disable:4819)
 #pragma warning(disable:4996)
 #pragma warning(disable:4267)
+#pragma warning(disable:4180)
+#pragma warning(disable:4503)
 
 // 头文件包含.
 #include <string>
