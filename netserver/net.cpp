@@ -104,7 +104,7 @@ void session::handle_handshake(const boost::system::error_code& error)
 {
 	if (!error)
 	{
-		socket_.async_read_some(boost::asio::buffer(message_->data(), message::header_length),
+		socket_.async_read_some(boost::asio::buffer(message_->data(), message_->header_length()),
 			strand_.wrap(
 			boost::bind(&session::handle_read_head, shared_from_this(),
 			boost::asio::placeholders::error,
@@ -121,7 +121,7 @@ void session::handle_handshake(const boost::system::error_code& error)
 void session::start()
 {
 	message_->setsession(shared_from_this());
-	socket_.async_read_some(boost::asio::buffer(message_->data(), message::header_length),
+	socket_.async_read_some(boost::asio::buffer(message_->data(), message_->header_length()),
 		strand_.wrap(
 		boost::bind(&session::handle_read_head, shared_from_this(),
 		boost::asio::placeholders::error,
@@ -133,14 +133,21 @@ void session::start()
 void session::handle_read_body(const boost::system::error_code& error,
 							   size_t bytes_transferred)
 {
-	if (!error && message_->check_body(bytes_transferred))
+	if (!error)
 	{
-		jobwork_.submitjob(*message_);
-		socket_.async_read_some(boost::asio::buffer(message_->data(), message::header_length),
-			strand_.wrap(
-			boost::bind(&session::handle_read_head, shared_from_this(),
-			boost::asio::placeholders::error,
-			boost::asio::placeholders::bytes_transferred)));
+		if (message_->check_body(bytes_transferred))
+		{
+			jobwork_.submitjob(*message_);
+			socket_.async_read_some(boost::asio::buffer(message_->data(), message_->header_length()),
+				strand_.wrap(
+				boost::bind(&session::handle_read_head, shared_from_this(),
+				boost::asio::placeholders::error,
+				boost::asio::placeholders::bytes_transferred)));
+		}
+		else
+		{
+
+		}
 	}
 	else
 	{

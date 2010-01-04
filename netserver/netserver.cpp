@@ -21,20 +21,20 @@ public:
 		  if (!psession) 
 			  return false;
 
-		  packMsgPtr MsgPtr = task.msg();
-
-		  // 用psession往客户端回发数据;
-		  switch (MsgPtr->MsgHead.type)
-		  {
-		  case MSG_USER_HEART:
-			  // this->OnHeart(MsgPtr->heart);           // 处理心跳.
-			  break;
-		  case MSG_USER_LOGON:
-			  // this->OnLogon(MsgPtr->logon);           // 处理登陆.
-			  break;
-		  default:
-			  break;
-		  }
+// 		  packMsgPtr MsgPtr = task.msg();
+// 
+// 		  // 用psession往客户端回发数据;
+// 		  switch (MsgPtr->MsgHead.type)
+// 		  {
+// 		  case MSG_USER_HEART:
+// 			  // this->OnHeart(MsgPtr->heart);           // 处理心跳.
+// 			  break;
+// 		  case MSG_USER_LOGON:
+// 			  // this->OnLogon(MsgPtr->logon);           // 处理登陆.
+// 			  break;
+// 		  default:
+// 			  break;
+// 		  }
 
 		  return true;
 	  }
@@ -110,7 +110,6 @@ int main(int argc, char* argv[])
 					break;
 				else if(in != "")
 					std::cout << "Bad command ! \n";
-
 
 				std::cout << "prompt # ";
 				in = "";
