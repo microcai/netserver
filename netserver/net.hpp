@@ -31,24 +31,28 @@ typedef boost::shared_ptr<message> message_ptr;
 typedef boost::asio::ssl::stream<boost::asio::ip::tcp::socket> ssl_socket;
 #endif // SOCKET_SSL
 
-//////////////////////////////////////////////////////////////////////////
+/*/////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////*/
+
 class message
 {
+public:
 	// 下面结构体使用1字节对齐.
 	#pragma pack(push, 1)
 
-		typedef struct _tagPacketHeader 
-		{
-			unsigned int type;							// 数据包类型.
-			unsigned int checksum;						// 校检和,为其它三项之和. e.c type + rand + packsize.
-			unsigned int rand;							// 随机数.
-			unsigned int packsize;						// 数据包大小.
-		} header, *headerPtr;
+	typedef struct _tagPacketHeader 
+	{
+		unsigned int type;							// 数据包类型.
+		unsigned int checksum;						// 校检和,为其它三项之和. e.c type + rand + packsize.
+		unsigned int rand;							// 随机数.
+		unsigned int packsize;						// 数据包大小.
+	} header, *headerPtr;
 
 	// 恢复结构体字节对齐.
 	#pragma pack(pop)
 
-	#define HEADER_LENGTH sizeof(header)		// 头大小.
+#define HEADER_LENGTH sizeof(message::header)	// 头大小.
 	#define DEFAULT_BODY_LENGTH 10240			// 默认内存大小10k.
 
 public:
@@ -111,46 +115,49 @@ public:
 		body_length_ = 0;
 	}
 
-	const char* data() const
-	{
-		return data_;
-	}
-
+	// 返回数据指针.
 	char* data()
 	{
 		return data_;
 	}
 
+	// 整个数据包的长度.
 	size_t length() const
 	{
 		return HEADER_LENGTH + body_length_;
 	}
 
+	// 设置session指针.
 	void setsession(const session_ptr& _session)
 	{
 		session_ = _session;
 	}
 
+	// 得到session指针.
 	void getsession(session_ptr& _session)
 	{
 		_session = session_.lock();
 	}
 
+	// 返回body,除掉header的数据.
 	char* body()
 	{
 		return wptr_;
 	}
 
+	// 返回header的长度.
 	size_t header_length() const
 	{
 		return HEADER_LENGTH;
 	}
 
+	// 返回body的长度.
 	size_t body_length() const
 	{
 		return body_length_;
 	}
 
+	// 设置body的长度.
 	void body_length(size_t length)
 	{
 		if (length < 0)
@@ -158,6 +165,13 @@ public:
 		body_length_ = length;
 	}
 
+	// 返回header的头指针.
+	message::headerPtr head()
+	{
+		return msg_;
+	}
+
+	// 专用于解析接收的header数据.
 	bool decode_header()
 	{
 		msg_ = (headerPtr)data_;
@@ -178,7 +192,6 @@ public:
 
 			data_size_ = body_length_ + HEADER_LENGTH;
 			data_ = new char[data_size_];
-			wptr_ = rptr_ = data_;
 			msg_ = (headerPtr)data_;
 			*msg_ = msg;			
 		}
@@ -189,17 +202,18 @@ public:
 
 			data_size_ = DEFAULT_BODY_LENGTH + HEADER_LENGTH;
 			data_ = new char[data_size_];
-			wptr_ = rptr_ = data_;
 			msg_ = (headerPtr)data_;
 			*msg_ = msg;
 		}
 
 		// 移动到数据开始位置.
+		wptr_ = rptr_ = data_;
 		wptr_ += HEADER_LENGTH;
 
 		return true;
 	}
 
+	// 专用于检查接收body数据.
 	bool check_body(size_t bytes_transferred)
 	{
 		msg_ = (headerPtr)data_;
@@ -212,7 +226,7 @@ public:
 		}
 		
 		// 恢复写指针.
-		wptr_ = data_;
+		wptr_ = data_ + HEADER_LENGTH;
 		return true;
 	}
 

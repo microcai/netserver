@@ -21,20 +21,30 @@ public:
 		  if (!psession) 
 			  return false;
 
-// 		  packMsgPtr MsgPtr = task.msg();
-// 
-// 		  // 用psession往客户端回发数据;
-// 		  switch (MsgPtr->MsgHead.type)
-// 		  {
-// 		  case MSG_USER_HEART:
-// 			  // this->OnHeart(MsgPtr->heart);           // 处理心跳.
-// 			  break;
-// 		  case MSG_USER_LOGON:
-// 			  // this->OnLogon(MsgPtr->logon);           // 处理登陆.
-// 			  break;
-// 		  default:
-// 			  break;
-// 		  }
+		  google::protobuf::Message* msg;
+		  message::headerPtr head = task.head();
+		  size_t size = head->packsize - HEADER_LENGTH;
+		  void* buf = (void*)((char*)head +  HEADER_LENGTH);
+
+		  switch (head->type)
+		  {
+			case MSG_PACK_HEART:		// 处理心跳.
+				{
+					msg = new protocol::Heart;
+					msg->ParseFromArray(buf, size);
+				}
+				break;
+
+			case MSG_PACK_LOGON:		// 处理登陆.
+				{
+					msg = new protocol::Logon;
+					msg->ParseFromArray(buf, size);					
+				}
+				break;
+
+			default:
+				break;
+		  }
 
 		  return true;
 	  }
