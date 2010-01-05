@@ -1,3 +1,3 @@
 
-SUBDIRS = netserver
+SUBDIRS = protobuf netserver
 
