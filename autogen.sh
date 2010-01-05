@@ -2,8 +2,8 @@
 set -x
 aclocal
 autoheader
-cp /usr/share/libtool/config/ltmain.sh ./
-automake --foreign --add-missing --copy
+#cp /usr/share/libtool/config/ltmain.sh ./
+automake --add-missing --copy
 autoconf
 
 

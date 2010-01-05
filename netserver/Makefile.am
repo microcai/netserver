@@ -1,11 +1,11 @@
 if EXTRA_GOOGLE_PROTOBUFF
 AM_CXXFLAGS = 
 else
-AM_CXXFLAGS = -I$(top_srcdir)/protobuf
+AM_CXXFLAGS = -I$(top_srcdir)/protobuf -g -O0
 endif
 
 
-netserverdir= $(top_builddir/netserver)
+netserverdir= $(top_builddir)/netserver
 PCH=stdafx.h.gch
 PCH_HEADER=stdafx.h inc.h  defs.h BasePacket.h
 
@@ -18,13 +18,13 @@ netserver_HEADERS = jobqueue.hpp  net.hpp \
 					config.h  protocol.pb.h  stdafx.h
 
 if EXTRA_GOOGLE_PROTOBUFF
-netserver_LDADD = 
+netserver_LDADD = -lprotobuf
 else
-netserver_LDADD = -L$(top_builddir)/protobuf/.libs/
+netserver_LDADD = $(top_builddir)/protobuf/libprotobuf.a \
+					 $(top_builddir)/protobuf/libprotoc.a \
+					 $(top_builddir)/protobuf/libprotobuf_lite.a
 endif
 					
-netserver_LDADD += -lprotobuf					
-
 netserver_SOURCES: $(PCH)
 
 $(PCH) : $(PCH_HEADER)
