@@ -31,9 +31,6 @@ typedef boost::shared_ptr<message> message_ptr;
 typedef boost::asio::ssl::stream<boost::asio::ip::tcp::socket> ssl_socket;
 #endif // SOCKET_SSL
 
-/*/////////////////////////////////////////////////////////////////////////
-
-/////////////////////////////////////////////////////////////////////////*/
 
 class message
 {
@@ -52,7 +49,7 @@ public:
 	// 恢复结构体字节对齐.
 	#pragma pack(pop)
 
-#define HEADER_LENGTH sizeof(message::header)	// 头大小.
+	#define HEADER_LENGTH sizeof(message::header)	// 头大小.
 	#define DEFAULT_BODY_LENGTH 10240			// 默认内存大小10k.
 
 public:
