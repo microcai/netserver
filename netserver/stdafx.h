@@ -1,4 +1,4 @@
-/*
+﻿/*
  *
  * Copyright (C) 2009 jack.wgm, microcai.
  * For conditions of distribution and use, see copyright notice 
@@ -12,15 +12,15 @@
 #pragma once
 #endif
 
-#define WIN32_LEAN_AND_MEAN		// �� Windows ͷ���ų���ʹ�õ�����
+#define WIN32_LEAN_AND_MEAN		// 从 Windows 头中排除极少使用的资料
 #include <stdio.h>
 
 #ifndef _WIN32
 
-// ��׼��linux���Ͷ����ļ�.
+// 标准的linux类型定义文件.
 #include <stdint.h>
 
-// ����VC������.
+// 兼容VC的类型.
 typedef char CHAR;
 typedef unsigned int UINT;
 

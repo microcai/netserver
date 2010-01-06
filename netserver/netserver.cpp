@@ -1,4 +1,4 @@
-// netserver.cpp : �������̨Ӧ�ó������ڵ�?
+﻿// netserver.cpp : 定义控制台应用程序的入口点。
 //
 
 #include "stdafx.h"
@@ -14,7 +14,7 @@ public:
 	  worker<message>(_jobqueue, _maxthreads)
 	  {}
 
-	  virtual bool work(message& task)       // ��Щ���ʵ������.
+	  virtual bool work(message& task)       // 在些完成实际任务.
 	  {
 		  session_ptr psession;
 		  task.getsession(psession);
@@ -28,17 +28,17 @@ public:
 
 		  switch (head->type)
 		  {
-			case MSG_PACK_HEART:		// ��������.
+			case MSG_PACK_HEART:		// 处理心跳.
 				{
 					msg = new protocol::Heart;
-					msg->ParseFromArray(buf, size);
+					msg->ParseFromArray(buf, size);					
 				}
 				break;
 
-			case MSG_PACK_LOGON:		// ������½.
+			case MSG_PACK_LOGON:		// 处理登陆.
 				{
 					msg = new protocol::Logon;
-					msg->ParseFromArray(buf, size);					
+					msg->ParseFromArray(buf, size);
 				}
 				break;
 
@@ -46,6 +46,7 @@ public:
 				break;
 		  }
 
+		  delete msg;
 		  return true;
 	  }
 };
@@ -64,9 +65,9 @@ public:
 
 	~RunServer() 
 	{
-		_workerptr->stop(); // ֹͣ.
-		_serverptr->stop(); // ֹͣ.
-		_jobqueueptr->notify_all(); // ֪ͨ.
+		_workerptr->stop(); // 停止.
+		_serverptr->stop(); // 停止.
+		_jobqueueptr->notify_all(); // 通知.
 
 		_listenthreadptr->join();
 		_workthreadptr->join();
@@ -102,10 +103,10 @@ int main(int argc, char* argv[])
 			return 1;
 		}
 
-		RunServer runServer1(atoi(argv[1]));                // ��һ��server.
-		RunServer runServer2(atoi(argv[1]) + 1);            // �ڶ���server.
+		RunServer runServer1(atoi(argv[1]));                // 第一个server.
+		RunServer runServer2(atoi(argv[1]) + 1);            // 第二个server.
 
-		// �ȴ��˳�...
+		// 等待退出...
 		std::string in;
 
 		std::cout << "type 'exit' to exit.\nprompt # ";

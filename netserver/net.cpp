@@ -1,4 +1,4 @@
-#include "stdafx.h"
+ï»¿#include "stdafx.h"
 #include "net.hpp"
 
 //////////////////////////////////////////////////////////////////////////
@@ -154,9 +154,9 @@ void session::handle_read_body(const boost::system::error_code& error,
 	{
 		if (message_->check_body(bytes_transferred))
 		{
-			// Ìá½»Êý¾Ý°üµ½¶ÓÁÐ.
+			// æäº¤æ•°æ®åŒ…åˆ°é˜Ÿåˆ—.
 			jobwork_.submitjob(*message_);
-			// ¶ÁÈ¡ÏÂÒ»¸öÊý¾Ý°ü.
+			// è¯»å–ä¸‹ä¸€ä¸ªæ•°æ®åŒ….
 			socket_.async_read_some(boost::asio::buffer(message_->data(), message_->header_length()),
 #if defined(USE_SYNC)
 				strand_.wrap(
@@ -171,7 +171,7 @@ void session::handle_read_body(const boost::system::error_code& error,
 		}
 		else
 		{
-			// Êý¾Ý°üÎ´¶ÁÈ¡ÍêÕû,¼ÌÐø¶ÁÈ¡.
+			// æ•°æ®åŒ…æœªè¯»å–å®Œæ•´,ç»§ç»­è¯»å–.
 			socket_.async_read_some(boost::asio::buffer(message_->body(), message_->body_length()),
 #if defined(USE_SYNC)
 				strand_.wrap(
@@ -225,7 +225,7 @@ void session::handle_write(const boost::system::error_code& error)
 	}
 	else
 	{
-		// ÓÅÑÅµÄ¹Ø±ÕÌ×½Ó×Ö.
+		// ä¼˜é›…çš„å…³é—­å¥—æŽ¥å­—.
 		boost::system::error_code ignored_ec;
 #if defined(SOCKET_SSL)
 		socket_.shutdown(ignored_ec);

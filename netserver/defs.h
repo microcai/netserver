@@ -1,4 +1,4 @@
-/*
+ï»¿/*
  *
  * Copyright (C) 2009 jack.wgm, microcai.
  * For conditions of distribution and use, see copyright notice 
@@ -15,12 +15,12 @@
 #pragma once
 #endif
 
-// ¶¨Òå¸÷Êý¾Ý°ü±êÊ¶.
-#define MSG_PACK_HEART                         0x0000              // ÐÄÌø°ü. c -> s.
+// å®šä¹‰å„æ•°æ®åŒ…æ ‡è¯†.
+#define MSG_PACK_HEART                         0x0000              // å¿ƒè·³åŒ…. c -> s.
 
-#define MSG_PACK_LOGON                         0x0001              // ÓÃ»§µÇÂ½°ü. c -> s.
-#define MSG_PACK_FBLOGON                       0x0002              // ÓÃ»§µÇÂ½°ü. s -> c.
+#define MSG_PACK_LOGON                         0x0001              // ç”¨æˆ·ç™»é™†åŒ…. c -> s.
+#define MSG_PACK_FBLOGON                       0x0002              // ç”¨æˆ·ç™»é™†åŒ…. s -> c.
 
-#define MSG_PACK_LOGOUT                        0x0003              // ÓÃ»§µÇ³ö°ü. c -> s.
+#define MSG_PACK_LOGOUT                        0x0003              // ç”¨æˆ·ç™»å‡ºåŒ…. c -> s.
 
 #endif //_HEAP_FILE_DEFS_

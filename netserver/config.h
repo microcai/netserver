@@ -1,4 +1,4 @@
-/*
+ï»¿/*
  *
  * Copyright (C) 2009 jack.wgm, microcai.
  * For conditions of distribution and use, see copyright notice 
@@ -16,12 +16,12 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////
-// ±àÒëÅäÖÃÑ¡Ïî.
+// ç¼–è¯‘é…ç½®é€‰é¡¹.
 
-// Ê¹ÓÃssl¼ÓÃÜÈÏÖ¤Í¨ĞÅ.
+// ä½¿ç”¨sslåŠ å¯†è®¤è¯é€šä¿¡.
 #define SOCKET_SSL
 
-// ÊÇ·ñÊ¹ÓÃÏµÍ³Í¬²½½ÓÊÕÊı¾İ.
+// æ˜¯å¦ä½¿ç”¨ç³»ç»ŸåŒæ­¥æ¥æ”¶æ•°æ®.
 #define USE_SYNC
 
 #endif // CONFIG_H__

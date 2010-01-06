@@ -1,4 +1,4 @@
-/*
+ï»¿/*
  *
  * Copyright (C) 2009 jack.wgm, microcai.
  * For conditions of distribution and use, see copyright notice 
@@ -16,7 +16,7 @@
 #pragma once
 #endif
 
-// ½ûÓÃ¾¯¸æĞÅÏ¢.
+// ç¦ç”¨è­¦å‘Šä¿¡æ¯.
 #pragma warning(disable:4786)
 #pragma warning(disable:4089)
 #pragma warning(disable:4146)
@@ -26,7 +26,7 @@
 #pragma warning(disable:4180)
 #pragma warning(disable:4503)
 
-// Í·ÎÄ¼ş°üº¬.
+// å¤´æ–‡ä»¶åŒ…å«.
 #include <string>
 
 #include <stdexcept>
