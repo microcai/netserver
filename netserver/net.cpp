@@ -50,8 +50,8 @@ boost::asio::io_service& io_service_pool::get_io_service()
 //////////////////////////////////////////////////////////////////////////
 #if defined(SOCKET_SSL)
 
-session::session(boost::asio::io_service& io_service, 
-				jobqueue<message>& jobwork, 
+session::session(boost::asio::io_service& io_service,
+				jobqueue<message>& jobwork,
 				boost::object_pool<message>& message_pool,
 				boost::asio::ssl::context& context)
 : socket_(io_service, context)
@@ -109,7 +109,7 @@ void session::handle_handshake(const boost::system::error_code& error)
 	if (!error)
 	{
 		socket_.async_read_some(boost::asio::buffer(message_->data(), message_->header_length()),
-			
+
 #if defined(USE_SYNC)
 			strand_.wrap(
 #endif // USE_SYNC
@@ -245,15 +245,15 @@ server::server(short port, jobqueue<message>& jobwork, std::size_t io_service_po
 , acceptor_(io_service_pool_.get_io_service(), tcp::endpoint(tcp::v4(), port))
 , context_(io_service_pool_.get_io_service(), boost::asio::ssl::context::sslv23)
 {
+	extern std::string	basedir;
 	context_.set_options(
 		boost::asio::ssl::context::default_workarounds
 		| boost::asio::ssl::context::no_sslv2
 		| boost::asio::ssl::context::single_dh_use);
 	context_.set_password_callback(boost::bind(&server::get_password, this));
-	context_.use_certificate_chain_file("server.pem");
-	context_.use_private_key_file("server.pem", boost::asio::ssl::context::pem);
-	context_.use_tmp_dh_file("dh512.pem");
-
+	context_.use_certificate_chain_file(basedir + "server.pem"  );
+	context_.use_private_key_file(basedir + "server.pem", boost::asio::ssl::context::pem);
+	context_.use_tmp_dh_file(basedir + "dh512.pem");
 	session_ptr new_session(new session(io_service_pool_.get_io_service(), jobwork_, message_pool_, context_));
 	acceptor_.async_accept(new_session->socket(),
 		boost::bind(&server::handle_accept, this, new_session,
