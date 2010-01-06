@@ -93,15 +93,9 @@ private:
 	boost::shared_ptr<server> _serverptr;
 };
 
-std::string	basedir;
 
 int main(int argc, char* argv[])
 {
-	char * strptr = argv[0] + strlen(argv[0]) ;
-	while( strptr > argv[0] && *strptr!='/' ) strptr--;
-	if(*strptr=='/')strptr++;
-	//so, for windows , basedir is always ""
-	basedir.assign(argv[0],strptr);
 	try
 	{
 		if (argc != 2)

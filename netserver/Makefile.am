@@ -11,12 +11,12 @@ PCH_HEADER=stdafx.h inc.h  defs.h
 
 bin_PROGRAMS = netserver
 
-netserver_SOURCES = net.cpp netserver.cpp protocol.pb.cc
+netserver_DEPENDENCIES =  $(PCH)
+netserver_SOURCES = net.cpp netserver.cpp protocol.pb.cc 
 netserver_HEADERS = jobqueue.hpp  net.hpp \
 					worker.hpp stdafx.cpp \
 					stdafx.h inc.h  defs.h \
-					config.h  protocol.pb.h  stdafx.h \
-					$(top_srcdir)/netserver/$(PCH)
+					config.h  protocol.pb.h  stdafx.h 
 
 if EXTRA_GOOGLE_PROTOBUFF
 netserver_LDADD = -lprotobuf
@@ -28,6 +28,7 @@ endif
 
 #netserver_BUILD_SOURCES = $(PCH)
 					
-$(top_srcdir)/netserver/$(PCH) : $(PCH_HEADER)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(AM_CXXFLAGS) $< 
+$(PCH) : $(PCH_HEADER)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(AM_CXXFLAGS)  $<
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(AM_CXXFLAGS)  $< -o $@
 
