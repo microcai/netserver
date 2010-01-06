@@ -1,4 +1,4 @@
-/*
+﻿/*
  *
  * Copyright (C) 2009 jack.wgm, microcai.
  * For conditions of distribution and use, see copyright notice 

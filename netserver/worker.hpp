@@ -1,4 +1,4 @@
-/*
+ï»¿/*
 *
 * Copyright (C) 2009 jack.wgm, microcai.
 * For conditions of distribution and use, see copyright notice 
@@ -27,10 +27,10 @@ public:
 public:
 	void run();
 	void stop();
-	virtual bool work(Job& task) = 0;       // ÅÉÉúÀàĞèÒªÖØÔØ´ËĞéº¯Êı,ÒÔÍê³É¹¤×÷.
+	virtual bool work(Job& task) = 0;       // æ´¾ç”Ÿç±»éœ€è¦é‡è½½æ­¤è™šå‡½æ•°,ä»¥å®Œæˆå·¥ä½œ.
 
 protected:
-	void workloop();                    // ¹¤×÷Ñ­»·.
+	void workloop();                    // å·¥ä½œå¾ªç¯.
 
 private:
 	std::vector<boost::shared_ptr<boost::thread> > threads_;
@@ -82,7 +82,7 @@ void worker<Job>::stop()
 }
 
 template <typename Job>
-void worker<Job>::workloop()               // ËùÓĞ¹¤×÷ÔÚĞ©Íê³É.
+void worker<Job>::workloop()               // æ‰€æœ‰å·¥ä½œåœ¨äº›å®Œæˆ.
 {
 	do 
 	{

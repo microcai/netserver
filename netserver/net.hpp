@@ -1,4 +1,4 @@
-/*
+ï»¿/*
  *
  * Copyright (C) 2009 jack.wgm, microcai.
  * For conditions of distribution and use, see copyright notice 
@@ -35,29 +35,29 @@ typedef boost::asio::ssl::stream<boost::asio::ip::tcp::socket> ssl_socket;
 class message
 {
 public:
-	// ÏÂÃæ½á¹¹ÌåÊ¹ÓÃ1×Ö½Ú¶ÔÆë.
+	// ä¸‹é¢ç»“æ„ä½“ä½¿ç”¨1å­—èŠ‚å¯¹é½.
 	#pragma pack(push, 1)
 
 	typedef struct _tagPacketHeader 
 	{
-		unsigned int type;							// Êı¾İ°üÀàĞÍ.
-		unsigned int checksum;						// Ğ£¼ìºÍ,ÎªÆäËüÈıÏîÖ®ºÍ. e.c type + rand + packsize.
-		unsigned int rand;							// Ëæ»úÊı.
-		unsigned int packsize;						// Êı¾İ°ü´óĞ¡.
+		unsigned int type;							// æ•°æ®åŒ…ç±»å‹.
+		unsigned int checksum;						// æ ¡æ£€å’Œ,ä¸ºå…¶å®ƒä¸‰é¡¹ä¹‹å’Œ. e.c type + rand + packsize.
+		unsigned int rand;							// éšæœºæ•°.
+		unsigned int packsize;						// æ•°æ®åŒ…å¤§å°.
 	} header, *headerPtr;
 
-	// »Ö¸´½á¹¹Ìå×Ö½Ú¶ÔÆë.
+	// æ¢å¤ç»“æ„ä½“å­—èŠ‚å¯¹é½.
 	#pragma pack(pop)
 
-	#define HEADER_LENGTH sizeof(message::header)	// Í·´óĞ¡.
-	#define DEFAULT_BODY_LENGTH 10240			// Ä¬ÈÏÄÚ´æ´óĞ¡10k.
+	#define HEADER_LENGTH sizeof(message::header)	// å¤´å¤§å°.
+	#define DEFAULT_BODY_LENGTH 10240			// é»˜è®¤å†…å­˜å¤§å°10k.
 
 public:
 	message() 
 		: body_length_(0)
 		, msg_(NULL)
 	{
-		// Ä¬ÈÏ·ÖÅäÄÚ´æ¿é´óĞ¡.
+		// é»˜è®¤åˆ†é…å†…å­˜å—å¤§å°.
 		data_ = new char[DEFAULT_BODY_LENGTH + HEADER_LENGTH];
 		wptr_ = rptr_ = data_;
 		data_size_ = DEFAULT_BODY_LENGTH + HEADER_LENGTH;
@@ -65,7 +65,7 @@ public:
 
 	message(const message& msg)
 	{		
-		// Ô­ÄÚ´æ¿éÌ«Ğ¡,ÖØĞÂ·ÖÅäÄÚ´æ.
+		// åŸå†…å­˜å—å¤ªå°,é‡æ–°åˆ†é…å†…å­˜.
 		if (data_size_ < msg.data_size_) 
 		{
 			if (data_ != NULL)
@@ -75,7 +75,7 @@ public:
 			wptr_ = rptr_ = data_;
 		}
 		
-		// ¿½±´ÄÚ´æ.
+		// æ‹·è´å†…å­˜.
 		memcpy(data_, msg.data_, msg.data_size_);
 		body_length_ = msg.body_length_;
 		msg_ = (headerPtr)data_;
@@ -84,7 +84,7 @@ public:
 
 	message& operator =(message &msg)
 	{
-		if (data_size_ < msg.data_size_) // Ô­ÄÚ´æ¿éÌ«Ğ¡,ÖØĞÂ·ÖÅäÄÚ´æ.
+		if (data_size_ < msg.data_size_) // åŸå†…å­˜å—å¤ªå°,é‡æ–°åˆ†é…å†…å­˜.
 		{
 			if (data_ != NULL)
 				delete data_;
@@ -93,7 +93,7 @@ public:
 			wptr_ = rptr_ = data_;
 		}
 
-		// ¿½±´ÄÚ´æ.
+		// æ‹·è´å†…å­˜.
 		memcpy(data_, msg.data_, msg.data_size_);
 		body_length_ = msg.body_length_;
 		msg_ = (headerPtr)data_;
@@ -112,49 +112,49 @@ public:
 		body_length_ = 0;
 	}
 
-	// ·µ»ØÊı¾İÖ¸Õë.
+	// è¿”å›æ•°æ®æŒ‡é’ˆ.
 	char* data()
 	{
 		return data_;
 	}
 
-	// Õû¸öÊı¾İ°üµÄ³¤¶È.
+	// æ•´ä¸ªæ•°æ®åŒ…çš„é•¿åº¦.
 	size_t length() const
 	{
 		return HEADER_LENGTH + body_length_;
 	}
 
-	// ÉèÖÃsessionÖ¸Õë.
+	// è®¾ç½®sessionæŒ‡é’ˆ.
 	void setsession(const session_ptr& _session)
 	{
 		session_ = _session;
 	}
 
-	// µÃµ½sessionÖ¸Õë.
+	// å¾—åˆ°sessionæŒ‡é’ˆ.
 	void getsession(session_ptr& _session)
 	{
 		_session = session_.lock();
 	}
 
-	// ·µ»Øbody,³ıµôheaderµÄÊı¾İ.
+	// è¿”å›body,é™¤æ‰headerçš„æ•°æ®.
 	char* body()
 	{
 		return wptr_;
 	}
 
-	// ·µ»ØheaderµÄ³¤¶È.
+	// è¿”å›headerçš„é•¿åº¦.
 	size_t header_length() const
 	{
 		return HEADER_LENGTH;
 	}
 
-	// ·µ»ØbodyµÄ³¤¶È.
+	// è¿”å›bodyçš„é•¿åº¦.
 	size_t body_length() const
 	{
 		return body_length_;
 	}
 
-	// ÉèÖÃbodyµÄ³¤¶È.
+	// è®¾ç½®bodyçš„é•¿åº¦.
 	void body_length(size_t length)
 	{
 		if (length < 0)
@@ -162,26 +162,26 @@ public:
 		body_length_ = length;
 	}
 
-	// ·µ»ØheaderµÄÍ·Ö¸Õë.
+	// è¿”å›headerçš„å¤´æŒ‡é’ˆ.
 	message::headerPtr head()
 	{
 		return msg_;
 	}
 
-	// ×¨ÓÃÓÚ½âÎö½ÓÊÕµÄheaderÊı¾İ.
+	// ä¸“ç”¨äºè§£ææ¥æ”¶çš„headeræ•°æ®.
 	bool decode_header()
 	{
 		msg_ = (headerPtr)data_;
 		header msg = *msg_;
-		// ¼ì²éĞ£¼ìºÍ.
+		// æ£€æŸ¥æ ¡æ£€å’Œ.
 		if (msg.checksum != (msg.type + msg.rand + msg.packsize))			
 		{
 			body_length_ = 0;
 			return false;
 		}
-		// ¼ÆËãÊµ¼ÊÊı¾İ³¤¶È. ¹«Ê½: body_length_ = Êı¾İ°ü´óĞ¡ - header_length.
+		// è®¡ç®—å®é™…æ•°æ®é•¿åº¦. å…¬å¼: body_length_ = æ•°æ®åŒ…å¤§å° - header_length.
 		body_length_ = msg.packsize - HEADER_LENGTH;
-		// Èç¹ûÄÚ´æ²»¹»,ÖØĞÂ·ÖÅä´óÄÚ´æ.
+		// å¦‚æœå†…å­˜ä¸å¤Ÿ,é‡æ–°åˆ†é…å¤§å†…å­˜.
 		if ((body_length_ + HEADER_LENGTH) > data_size_)
 		{
 			if (data_ != NULL)
@@ -193,7 +193,7 @@ public:
 			*msg_ = msg;			
 		}
 		else if (((body_length_ + HEADER_LENGTH) < DEFAULT_BODY_LENGTH) && data_size_ > DEFAULT_BODY_LENGTH)
-		{	// ³·ÏûÉÏ´Î·ÖÅäÄÚ´æ¹ı´ó,ÖØĞÂ·ÖÅäÄÚ´æ.
+		{	// æ’¤æ¶ˆä¸Šæ¬¡åˆ†é…å†…å­˜è¿‡å¤§,é‡æ–°åˆ†é…å†…å­˜.
 			if (data_ != NULL)
 				delete data_;
 
@@ -203,14 +203,14 @@ public:
 			*msg_ = msg;
 		}
 
-		// ÒÆ¶¯µ½Êı¾İ¿ªÊ¼Î»ÖÃ.
+		// ç§»åŠ¨åˆ°æ•°æ®å¼€å§‹ä½ç½®.
 		wptr_ = rptr_ = data_;
 		wptr_ += HEADER_LENGTH;
 
 		return true;
 	}
 
-	// ×¨ÓÃÓÚ¼ì²é½ÓÊÕbodyÊı¾İ.
+	// ä¸“ç”¨äºæ£€æŸ¥æ¥æ”¶bodyæ•°æ®.
 	bool check_body(size_t bytes_transferred)
 	{
 		msg_ = (headerPtr)data_;
@@ -219,21 +219,21 @@ public:
 		{
 			body_length_ -= bytes_transferred;
 			wptr_ += bytes_transferred;
-			return false; // Î´¶ÁÍêÕû»òÕß³ö´í.
+			return false; // æœªè¯»å®Œæ•´æˆ–è€…å‡ºé”™.
 		}
 		
-		// »Ö¸´Ğ´Ö¸Õë.
+		// æ¢å¤å†™æŒ‡é’ˆ.
 		wptr_ = data_ + HEADER_LENGTH;
 		return true;
 	}
 
 private:
-	headerPtr msg_;			// Ö¸ÏòÊı¾İÍ·Ö¸Õë.
-	char* data_;			// Êı¾İÖ¸Õë.
-	char* wptr_;			// Ğ´Êı¾İÖ¸Õë.
-	char* rptr_;			// ¶ÁÊı¾İÖ¸Õë.
-	size_t data_size_;		// ÄÚ´æ¿é´óĞ¡.
-	size_t body_length_;	// ÎªÊµ¼ÊÊı¾İ³¤¶È.
+	headerPtr msg_;			// æŒ‡å‘æ•°æ®å¤´æŒ‡é’ˆ.
+	char* data_;			// æ•°æ®æŒ‡é’ˆ.
+	char* wptr_;			// å†™æ•°æ®æŒ‡é’ˆ.
+	char* rptr_;			// è¯»æ•°æ®æŒ‡é’ˆ.
+	size_t data_size_;		// å†…å­˜å—å¤§å°.
+	size_t body_length_;	// ä¸ºå®é™…æ•°æ®é•¿åº¦.
 	boost::weak_ptr<session> session_;
 };
 
@@ -259,7 +259,7 @@ private:
 };
 
 //////////////////////////////////////////////////////////////////////////
-#if defined(SOCKET_SSL) // Ê¹ÓÃssl¼ÓÃÜ.
+#if defined(SOCKET_SSL) // ä½¿ç”¨sslåŠ å¯†.
 
 class session
 	: public boost::enable_shared_from_this<session>
@@ -316,7 +316,7 @@ private:
 	boost::object_pool<message> message_pool_;
 };
 
-#else // Î´Ê¹ÓÃssl¼ÓÃÜ.
+#else // æœªä½¿ç”¨sslåŠ å¯†.
 
 class session
 	: public boost::enable_shared_from_this<session>

@@ -1,11 +1,11 @@
 package protocol;
 
-// ÐÄÌø°ü. c -> s.
+// å¿ƒè·³åŒ…. c -> s.
 message Heart {
   optional string reserve = 1;
 }
 
-// µÇÂ½°ü. c -> s.
+// ç™»é™†åŒ…. c -> s.
 message Logon {
   required string user = 1;
   required string pass = 2;
@@ -17,7 +17,7 @@ message Logon {
   }    
 }
 
-// µÇÂ½·µ»Ø°ü. s -> c.
+// ç™»é™†è¿”å›žåŒ…. s -> c.
 message LogonRet {
   required string user = 1;
   required string pass = 2;
@@ -29,7 +29,7 @@ message LogonRet {
   }    
 }
 
-// µÇ³ö°ü. c -> s.
+// ç™»å‡ºåŒ…. c -> s.
 message Logout {
   optional string reserve = 1;
 }
