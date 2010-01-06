@@ -120,7 +120,6 @@ AS_IF([test "$with_protoc" != "no"], [
 ])
 AM_CONDITIONAL([USE_EXTERNAL_PROTOC], [test "$with_protoc" != "no"])
 
-ACX_PTHREAD
 # HACK:  Make gtest's configure script pick up our copy of CFLAGS and CXXFLAGS,
 #   since the flags added by ACX_CHECK_SUNCC must be used when compiling gtest
 #   too.
@@ -139,17 +138,21 @@ AC_CHECK_LIB(ssl,[main])
 AC_CHECK_HEADER([google/protobuf/stubs/common.h],[],[have_google_protobuff=no])
 
 AM_CONDITIONAL(EXTRA_GOOGLE_PROTOBUFF,[ test "x$have_google_protobuff" = "xyes"])
-AM_CONDITIONAL(USE_EXTERNAL_PROTOC,[0])
+AM_CONDITIONAL(USE_EXTERNAL_PROTOC,[false])
 # Checks for header files.
 
-AC_CHECK_HEADER([pthread.h],[AC_DEFINE(HAVE_PTHREAD,1,[defined on linuxz])])
-
-# Checks for library functions.
-ACX_PTHREAD
+AC_CHECK_HEADER([openssl/bio.h],[AC_DEFINE(SOCKET_SSL,1,[use openssl])])
+AC_CHECK_HEADER([pthread.h],[AC_DEFINE(HAVE_PTHREAD,1,[defined on Linux])])
 
 AC_DEFINE(USE_SYNC,1,[use sync])
-AC_DEFINE(SOCKET_SSL,1,[use openssl])
 
+srcdir=`dirname $0`
+
+AS_IF( test "$srcdir" != "$PWD" , [  
+	cp ${srcdir}/netserver/server.pem ${PWD}/netserver/
+	cp ${srcdir}/netserver/dh512.pem ${PWD}/netserver/ 
+  ]  )
+  
 AC_CONFIG_FILES([
 	Makefile
 	protobuf/Makefile	

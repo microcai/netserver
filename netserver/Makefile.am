@@ -7,7 +7,7 @@ endif
 
 netserverdir= $(top_builddir)/netserver
 PCH=stdafx.h.gch
-PCH_HEADER=stdafx.h inc.h  defs.h BasePacket.h
+PCH_HEADER=stdafx.h inc.h  defs.h
 
 bin_PROGRAMS = netserver
 
@@ -15,7 +15,8 @@ netserver_SOURCES = net.cpp netserver.cpp protocol.pb.cc
 netserver_HEADERS = jobqueue.hpp  net.hpp \
 					worker.hpp stdafx.cpp \
 					stdafx.h inc.h  defs.h \
-					config.h  protocol.pb.h  stdafx.h
+					config.h  protocol.pb.h  stdafx.h \
+					$(top_srcdir)/netserver/$(PCH)
 
 if EXTRA_GOOGLE_PROTOBUFF
 netserver_LDADD = -lprotobuf
@@ -24,9 +25,9 @@ netserver_LDADD = $(top_builddir)/protobuf/libprotobuf.a \
 					 $(top_builddir)/protobuf/libprotoc.a \
 					 $(top_builddir)/protobuf/libprotobuf_lite.a
 endif
-					
-netserver_SOURCES: $(PCH)
 
-$(PCH) : $(PCH_HEADER)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $< 
+#netserver_BUILD_SOURCES = $(PCH)
+					
+$(top_srcdir)/netserver/$(PCH) : $(PCH_HEADER)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(AM_CXXFLAGS) $< 
 

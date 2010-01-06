@@ -18,7 +18,7 @@ public:
 	  {
 		  session_ptr psession;
 		  task.getsession(psession);
-		  if (!psession) 
+		  if (!psession)
 			  return false;
 
 		  google::protobuf::Message* msg;
@@ -31,7 +31,7 @@ public:
 			case MSG_PACK_HEART:		// 处理心跳.
 				{
 					msg = new protocol::Heart;
-					msg->ParseFromArray(buf, size);					
+					msg->ParseFromArray(buf, size);
 				}
 				break;
 
@@ -63,7 +63,7 @@ public:
 		_workthreadptr.reset(new boost::thread(boost::bind(&RunServer::RunWorks, this)));
 	}
 
-	~RunServer() 
+	~RunServer()
 	{
 		_workerptr->stop(); // 停止.
 		_serverptr->stop(); // 停止.
@@ -93,8 +93,15 @@ private:
 	boost::shared_ptr<server> _serverptr;
 };
 
+std::string	basedir;
+
 int main(int argc, char* argv[])
 {
+	char * strptr = argv[0] + strlen(argv[0]) ;
+	while( strptr > argv[0] && *strptr!='/' ) strptr--;
+	if(*strptr=='/')strptr++;
+	//so, for windows , basedir is always ""
+	basedir.assign(argv[0],strptr);
 	try
 	{
 		if (argc != 2)
@@ -112,7 +119,7 @@ int main(int argc, char* argv[])
 		std::cout << "type 'exit' to exit.\nprompt # ";
 
 		for (;;)
-		{			
+		{
 			char c = getchar();
 			if (c == '\n' || c == EOF )
 			{
